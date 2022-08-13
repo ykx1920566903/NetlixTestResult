@@ -3,13 +3,14 @@
 #判断当前IP是否解锁，解锁则退出
 CODE=$(curl -x 'http://0kgxvLLr5L:WUMzjNDTrv@jcnetflix.yymood.top:47794' --user-agent "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.87 Safari/537.36" -fsL --write-out %{http_code} --output /dev/null --max-time 10 "https://www.netflix.com/title/81215567")
 if [[ ${CODE} == "200" ]]; then
+echo "当前IP解锁正常，脚本退出"
   exit 0
 fi
 # API key, see https://www.cloudflare.com/a/account/my-account,
 # incorrect api-key results in E_UNAUTH error
-CFKEY=
+CFKEY=b1446c285b2d53c6b7c9fea5f09daff9eb37e
 # Username, eg: user@example.com
-CFUSER=
+CFUSER=ykx990505@gmail.com
 # Zone name, eg: example.com
 CFZONE_NAME=yymood.top
 # Hostname to update, eg: homeserver.example.com
@@ -62,8 +63,8 @@ RESPONSE=$(curl -s -X PUT "https://api.cloudflare.com/client/v4/zones/$CFZONE_ID
 if [ "$RESPONSE" != "${RESPONSE%success*}" ] && [ "$(echo "$RESPONSE" | grep "\"success\":true")" != "" ]; then
   echo "Updated succesfuly!"
   echo "${CURRENTIP}变为${IP}，调用TG机器人"
-  curl -s "https://api.telegram.org/bot2127424667:AAH1UiFuMBIhPXevSYI8QttJFWlfFT-Qpbg/sendMessage?chat_id=1191889094&text=检测到原IP${CURRENTIP}被Netflix关小黑屋，已自动为机器更换IP,新的IP地址是${IP}"
-curl -s "https://api.telegram.org/bot5310162411:AAHB4Cjh-oHJ4JbBZSrDkOlrwaSWtvZgouo/sendMessage?chat_id=1952026695&text=检测到原IP${CURRENTIP}被Netflix关小黑屋，已自动为机器更换IP,新的IP地址是${IP}"
+  curl -s "https://api.telegram.org/bot2127424667:AAH1UiFuMBIhPXevSYI8QttJFWlfFT-Qpbg/sendMessage?chat_id=1191889094&text=检测到${num}号机原IP${CURRENTIP}被Netflix关小黑屋，已自动为机器更换IP,新的IP地址是${IP}，中转域名当前使用的是${i}号机"
+curl -s "https://api.telegram.org/bot5310162411:AAHB4Cjh-oHJ4JbBZSrDkOlrwaSWtvZgouo/sendMessage?chat_id=1952026695&text=检测到${num}号机原IP${CURRENTIP}被Netflix关小黑屋，已自动为机器更换IP,新的IP地址是${IP}，中转域名当前使用的是${i}号机"
 else
   echo 'Something went wrong :('
   echo "Response: $RESPONSE"
