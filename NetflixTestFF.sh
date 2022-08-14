@@ -25,6 +25,8 @@ CFRECORD_TYPE=A
 CFTTL=60
 CFZONE_ID=$(curl -s -X GET "https://api.cloudflare.com/client/v4/zones?name=$CFZONE_NAME" -H "X-Auth-Email: $CFUSER" -H "X-Auth-Key: $CFKEY" -H "Content-Type: application/json" | grep -Po '(?<="id":")[^"]*' | head -1)
 CFRECORD_ID=$(curl -s -X GET "https://api.cloudflare.com/client/v4/zones/$CFZONE_ID/dns_records?name=$CFRECORD_NAME" -H "X-Auth-Email: $CFUSER" -H "X-Auth-Key: $CFKEY" -H "Content-Type: application/json"  | grep -Po '(?<="id":")[^"]*' | head -1)
+TG_BOT_TOKEN=your tgbot token
+TG_UID= you tg uid
 #遍历IP和解锁情况
 DOMAINS=(jcnetflix.yymood.top amdsg1.yymood.top amdsg2.yymood.top armsg3.yymood.top armsg4.yymood.top)
 IPS=(0 1 2 3 4)
@@ -49,8 +51,8 @@ for ((i = NUM; COUNT < ${#DOMAINS[@]}; i++, COUNT++)); do
     if [ "${CODES[i]}" = "404" ]; then
     #更换IP并通知
     printf "CODE为%s,更换%s号IP并调用TG机器人\n\n" "${CODES[i]}" "${i}"
-    curl -s "https://api.telegram.org/bot2127424667:AAH1UiFuMBIhPXevSYI8QttJFWlfFT-Qpbg/sendMessage?chat_id=1191889094&text=${i}号机IP被奈飞关小黑屋,已自动更换IP,是什么我也不知道.."
-    curl -s "https://api.telegram.org/bot5310162411:AAHB4Cjh-oHJ4JbBZSrDkOlrwaSWtvZgouo/sendMessage?chat_id=1952026695&text=${i}号机IP被奈飞关小黑屋,已自动更换IP,是什么我也不知道.."
+    curl -s "https://api.telegram.org/bot2127424667:${TG_BOT_TOKEN}/sendMessage?chat_id=${TG_UID}&text=${i}号机IP被奈飞关小黑屋,已自动更换IP,是什么我也不知道.."
+    curl -s "https://api.telegram.org/bot5310162411:${TG_BOT_TOKEN}/sendMessage?chat_id=${TG_UID}&text=${i}号机IP被奈飞关小黑屋,已自动更换IP,是什么我也不知道.."
     timeout 8s echo -e "1\n${i}\n5\ny\n" | ./oci-help -c /root/oci-help.ini
   elif   [ "${CODES[i]}" = "200" ]; then
     #解析IP并通知
