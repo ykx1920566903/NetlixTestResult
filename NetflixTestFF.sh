@@ -11,9 +11,9 @@ else
 fi
 # API key, see https://www.cloudflare.com/a/account/my-account,
 # incorrect api-key results in E_UNAUTH error
-CFKEY=b1446c285b2d53c6b7c9fea5f09daff9eb37e
+CFKEY=
 # Username, eg: user@example.com
-CFUSER=ykx990505@gmail.com
+CFUSER=
 # Zone name, eg: example.com
 CFZONE_NAME=yymood.top
 # Hostname to update, eg: homeserver.example.com
