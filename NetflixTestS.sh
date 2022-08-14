@@ -1,14 +1,16 @@
 #!/bin/bash
-#请预先配置好oci-help,存放目录地址为/root
+#请预先配置好oci-help,存放目录地址为/root/oci-help
 #判断当前IP是否解锁，解锁则退出
-STATUS=$(curl -x 'http://0kgxvLLr5L:WUMzjNDTrv@jcnetflix.yymood.top:47794' --user-agent "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.87 Safari/537.36" -fsL --write-out %{http_code} --output /dev/null --max-time 10 "https://www.netflix.com/title/81215567")
+STATUS=$(curl -x 'http://0kgxvLLr5L:WUMzjNDTrv@cc.yymood.top:47794' --user-agent "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.87 Safari/537.36" -fsL --write-out %{http_code} --output /dev/null --max-time 10 "https://www.netflix.com/title/81215567")
+
 if [[ ${STATUS} == "200" ]]; then
   echo "当前IP解锁正常,脚本退出"
   exit 0
 fi
 if [[ ${STATUS} == "404" ]]; then
-  NUM=$(cat > /root/netflix_server/current_id.txt)
-  timeout 10s  echo -e "1\n${NUM}\n5\ny\n" | ./oci-help -c /root/oci-help.ini
+  NUM=$(cat /root/netflix_server/current_id.txt)
+  echo "${NUM}"
+  timeout 10s  echo -e "1\n${NUM}\n5\nn\n" | ./oci-help -c /root/oci-help.ini
   curl -s "https://api.telegram.org/bot2127424667:AAH1UiFuMBIhPXevSYI8QttJFWlfFT-Qpbg/sendMessage?chat_id=1191889094&text=检测到${NUM}号机IP已被更换。" > /dev/null
   curl -s "https://api.telegram.org/bot5310162411:AAHB4Cjh-oHJ4JbBZSrDkOlrwaSWtvZgouo/sendMessage?chat_id=1952026695&text=检测到${NUM}号机IP已被更换。" > /dev/null
 fi
@@ -26,7 +28,7 @@ CFRECORD_TYPE=A
 # Cloudflare TTL for record, between 120 and 86400 seconds
 CFTTL=60
 ########获取当前IP
-CURRENTIP=$(cat > /root/netflix_server/current_ip.txt)
+CURRENTIP=$(cat /root/netflix_server/current_ip.txt)
 echo "当前IP为${CURRENTIP}"
 ########读取所有解锁机IP
 IPS=(0 1 2 3 4)
@@ -43,7 +45,7 @@ if [[ ${NUM} == "1" ]]; then
     CODE=$(curl -x "http://0kgxvLLr5L:WUMzjNDTrv@${IP}:47794" --user-agent "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.87 Safari/537.36" -fsL --write-out %{http_code} --output /dev/null --max-time 10 "https://www.netflix.com/title/81215567")
     echo "当前CODE为${CODE}"
     if [[ ${CODE} == "404" ]]; then
-      timeout 10s echo -e "1\n${i}\n5\ny\n" | ./oci-help -c /root/oci-help.ini
+      timeout 10s echo -e "1\n${i}\n5\nn\n" | ./oci-help -c /root/oci-help.ini
       curl -s "https://api.telegram.org/bot2127424667:AAH1UiFuMBIhPXevSYI8QttJFWlfFT-Qpbg/sendMessage?chat_id=1191889094&text=检测到${i}号机IP已被更换。" > /dev/null
       curl -s "https://api.telegram.org/bot5310162411:AAHB4Cjh-oHJ4JbBZSrDkOlrwaSWtvZgouo/sendMessage?chat_id=1952026695&text=检测到${i}号机IP已被更换。" > /dev/null
       echo "更换IP"
@@ -61,7 +63,7 @@ if [[ ${NUM} == "1" ]]; then
         --data "{\"id\":\"$CFZONE_ID\",\"type\":\"$CFRECORD_TYPE\",\"name\":\"$CFRECORD_NAME\",\"content\":\"$IP\", \"ttl\":$CFTTL}")
       echo "${CURRENTIP}变为${IP},调用TG机器人"
       echo "${IP}" > /root/netflix_server/current_ip.txt
-      echo ${i} > /root/netflix_server/current_id.txt
+      echo "${i}" > /root/netflix_server/current_id.txt
       curl -s "https://api.telegram.org/bot2127424667:AAH1UiFuMBIhPXevSYI8QttJFWlfFT-Qpbg/sendMessage?chat_id=1191889094&text=检测到${NUM}号机原IP${CURRENTIP}被Netflix关小黑屋,已自动为机器更换IP,新的IP地址是${IP}，中转域名当前使用的是${i}号机。" > /dev/null
       curl -s "https://api.telegram.org/bot5310162411:AAHB4Cjh-oHJ4JbBZSrDkOlrwaSWtvZgouo/sendMessage?chat_id=1952026695&text=检测到${NUM}号机原IP${CURRENTIP}被Netflix关小黑屋,已自动为机器更换IP,新的IP地址是${IP}，中转域名当前使用的是${i}号机。" > /dev/null
       echo "脚本退出"
@@ -77,7 +79,7 @@ if [[ ${NUM} == "2" ]]; then
     CODE=$(curl -x "http://0kgxvLLr5L:WUMzjNDTrv@${IP}:47794" --user-agent "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.87 Safari/537.36" -fsL --write-out %{http_code} --output /dev/null --max-time 10 "https://www.netflix.com/title/81215567")
     echo "当前CODE为${CODE}"
     if [[ ${CODE} == "404" ]]; then
-      timeout 10s echo -e "1\n${i}\n5\ny\n" | ./oci-help -c /root/oci-help.ini
+      timeout 10s echo -e "1\n${i}\n5\nn\n" | ./oci-help -c /root/oci-help.ini
       curl -s "https://api.telegram.org/bot2127424667:AAH1UiFuMBIhPXevSYI8QttJFWlfFT-Qpbg/sendMessage?chat_id=1191889094&text=检测到${i}号机IP已被更换。" > /dev/null
       curl -s "https://api.telegram.org/bot5310162411:AAHB4Cjh-oHJ4JbBZSrDkOlrwaSWtvZgouo/sendMessage?chat_id=1952026695&text=检测到${i}号机IP已被更换。" > /dev/null
       echo "更换IP"
@@ -95,7 +97,7 @@ if [[ ${NUM} == "2" ]]; then
         --data "{\"id\":\"$CFZONE_ID\",\"type\":\"$CFRECORD_TYPE\",\"name\":\"$CFRECORD_NAME\",\"content\":\"$IP\", \"ttl\":$CFTTL}")
       echo "${CURRENTIP}变为${IP},调用TG机器人"
       echo "${IP}" > /root/netflix_server/current_ip.txt
-      echo ${i} > /root/netflix_server/current_id.txt
+      echo "${i}" > /root/netflix_server/current_id.txt
       curl -s "https://api.telegram.org/bot2127424667:AAH1UiFuMBIhPXevSYI8QttJFWlfFT-Qpbg/sendMessage?chat_id=1191889094&text=检测到${NUM}号机原IP${CURRENTIP}被Netflix关小黑屋，已自动为机器更换IP,新的IP地址是${IP}，中转域名当前使用的是${i}号机。" > /dev/null
       curl -s "https://api.telegram.org/bot5310162411:AAHB4Cjh-oHJ4JbBZSrDkOlrwaSWtvZgouo/sendMessage?chat_id=1952026695&text=检测到${NUM}号机原IP${CURRENTIP}被Netflix关小黑屋，已自动为机器更换IP,新的IP地址是${IP}，中转域名当前使用的是${i}号机。" > /dev/null
       echo "脚本退出"
@@ -111,7 +113,7 @@ if [[ ${NUM} == "3" ]]; then
     CODE=$(curl -x "http://0kgxvLLr5L:WUMzjNDTrv@${IP}:47794" --user-agent "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.87 Safari/537.36" -fsL --write-out %{http_code} --output /dev/null --max-time 10 "https://www.netflix.com/title/81215567")
     echo "当前CODE为${CODE}"
     if [[ ${CODE} == "404" ]]; then
-      timeout 10s echo -e "1\n${i}\n5\ny\n" | ./oci-help -c /root/oci-help.ini
+      timeout 10s echo -e "1\n${i}\n5\nn\n" | ./oci-help -c /root/oci-help.ini
       curl -s "https://api.telegram.org/bot2127424667:AAH1UiFuMBIhPXevSYI8QttJFWlfFT-Qpbg/sendMessage?chat_id=1191889094&text=检测到${i}号机IP已被更换。" > /dev/null
       curl -s "https://api.telegram.org/bot5310162411:AAHB4Cjh-oHJ4JbBZSrDkOlrwaSWtvZgouo/sendMessage?chat_id=1952026695&text=检测到${i}号机IP已被更换。" > /dev/null
       echo "更换IP"
@@ -129,7 +131,7 @@ if [[ ${NUM} == "3" ]]; then
         --data "{\"id\":\"$CFZONE_ID\",\"type\":\"$CFRECORD_TYPE\",\"name\":\"$CFRECORD_NAME\",\"content\":\"$IP\", \"ttl\":$CFTTL}")
       echo "${CURRENTIP}变为${IP},调用TG机器人"
       echo "${IP}" > /root/netflix_server/current_ip.txt
-      echo ${i} > /root/netflix_server/current_id.txt
+      echo "${i}" > /root/netflix_server/current_id.txt
       curl -s "https://api.telegram.org/bot2127424667:AAH1UiFuMBIhPXevSYI8QttJFWlfFT-Qpbg/sendMessage?chat_id=1191889094&text=检测到${NUM}号机原IP${CURRENTIP}被Netflix关小黑屋，已自动为机器更换IP,新的IP地址是${IP}，中转域名当前使用的是${i}号机。" > /dev/null
       curl -s "https://api.telegram.org/bot5310162411:AAHB4Cjh-oHJ4JbBZSrDkOlrwaSWtvZgouo/sendMessage?chat_id=1952026695&text=检测到${NUM}号机原IP${CURRENTIP}被Netflix关小黑屋，已自动为机器更换IP,新的IP地址是${IP}，中转域名当前使用的是${i}号机。" > /dev/null
       echo "脚本退出"
@@ -145,7 +147,7 @@ if [[ ${NUM} == "4" ]]; then
     CODE=$(curl -x "http://0kgxvLLr5L:WUMzjNDTrv@${IP}:47794" --user-agent "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.87 Safari/537.36" -fsL --write-out %{http_code} --output /dev/null --max-time 10 "https://www.netflix.com/title/81215567")
     echo "当前CODE为${CODE}"
     if [[ ${CODE} == "404" ]]; then
-      timeout 10s echo -e "1\n${i}\n5\ny\n" | ./oci-help -c /root/oci-help.ini
+      timeout 10s echo -e "1\n${i}\n5\nn\n" | ./oci-help -c /root/oci-help.ini
       curl -s "https://api.telegram.org/bot2127424667:AAH1UiFuMBIhPXevSYI8QttJFWlfFT-Qpbg/sendMessage?chat_id=1191889094&text=检测到${i}号机IP已被更换。" > /dev/null
       curl -s "https://api.telegram.org/bot5310162411:AAHB4Cjh-oHJ4JbBZSrDkOlrwaSWtvZgouo/sendMessage?chat_id=1952026695&text=检测到${i}号机IP已被更换。" > /dev/null
       echo "更换IP"
@@ -161,9 +163,10 @@ if [[ ${NUM} == "4" ]]; then
         -H "X-Auth-Key: $CFKEY" \
         -H "Content-Type: application/json" \
         --data "{\"id\":\"$CFZONE_ID\",\"type\":\"$CFRECORD_TYPE\",\"name\":\"$CFRECORD_NAME\",\"content\":\"$IP\", \"ttl\":$CFTTL}")
+      echo "${RESPONSE}"
       echo "${CURRENTIP}变为${IP},调用TG机器人"
       echo "${IP}" > /root/netflix_server/current_ip.txt
-      echo ${i} > /root/netflix_server/current_id.txt
+      echo "${i}" > /root/netflix_server/current_id.txt
       curl -s "https://api.telegram.org/bot2127424667:AAH1UiFuMBIhPXevSYI8QttJFWlfFT-Qpbg/sendMessage?chat_id=1191889094&text=检测到${NUM}号机原IP${CURRENTIP}被Netflix关小黑屋，已自动为机器更换IP,新的IP地址是${IP}，中转域名当前使用的是${i}号机。" > /dev/null
       curl -s "https://api.telegram.org/bot5310162411:AAHB4Cjh-oHJ4JbBZSrDkOlrwaSWtvZgouo/sendMessage?chat_id=1952026695&text=检测到${NUM}号机原IP${CURRENTIP}被Netflix关小黑屋，已自动为机器更换IP,新的IP地址是${IP}，中转域名当前使用的是${i}号机。" > /dev/null
       echo "脚本退出"
