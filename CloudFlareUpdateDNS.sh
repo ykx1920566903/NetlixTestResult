@@ -1,11 +1,8 @@
 #!/bin/sh
 #更新DNS解析记录
-if read -r -t 5 -p "please enter IP:" IP    # -t，设置输入超时时间（本语句设置超时时间为5秒），默认单位是秒；-p，指定输入提示
-then                                              # 如果不超过5秒
-    echo "Continue,IP is ${IP}"
-else                                              # 超过5秒
-    echo "Timeout"
-fi
+echo "enter IP:"
+read -r IP    # -t，设置输入超时时间（本语句设置超时时间为5秒），默认单位是秒；-p，指定输入提示
+
 # API key, see https://www.cloudflare.com/a/account/my-account,
 # incorrect api-key results in E_UNAUTH error
 CFKEY=b1446c285b2d53c6b7c9fea5f09daff9eb37e
