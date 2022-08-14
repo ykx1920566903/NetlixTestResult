@@ -1,11 +1,10 @@
 #!/bin/bash
 #判断当前IP是否解锁，解锁则退出
-CODE=$(curl -x 'http://0kgxvLLr5L:WUMzjNDTrv@jcnetflix.yymood.top:47794' --user-agent "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.87 Safari/537.36" -fsL --write-out %{http_code} --output /dev/null --max-time 10 "https://www.netflix.com/title/81215567")
+DOMAIN=yy.com
+CODE=$(curl -x "http://0kgxvLLr5L:WUMzjNDTrv@${DOMAIN}:47794" --user-agent "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.87 Safari/537.36" -fsL --write-out %{http_code} --output /dev/null --max-time 10 "https://www.netflix.com/title/81215567")
 if [[ ${CODE} == "200" ]]; then
   echo '-------------分界线--------------------'
   echo '当前IP解锁正常,脚本退出'
-  exit 0
-elif [[ ${CODE} == "000" ]]; then
   exit 0
 else
   echo '当前IP解锁失效,进行下一步骤'
@@ -51,8 +50,8 @@ for ((i = NUM; COUNT < ${#DOMAINS[@]}; i++, COUNT++)); do
     if [ "${CODES[i]}" = "404" ]; then
     #更换IP并通知
     printf "CODE为%s,更换%s号IP并调用TG机器人\n\n" "${CODES[i]}" "${i}"
-    curl -s "https://api.telegram.org/bot2127424667:${TG_BOT_TOKEN}/sendMessage?chat_id=${TG_UID}&text=${i}号机IP被奈飞关小黑屋,已自动更换IP,是什么我也不知道.."
-    curl -s "https://api.telegram.org/bot5310162411:${TG_BOT_TOKEN}/sendMessage?chat_id=${TG_UID}&text=${i}号机IP被奈飞关小黑屋,已自动更换IP,是什么我也不知道.."
+    curl -s "https://api.telegram.org/bot2127424667:${TG_BOT_TOKEN}/sendMessage?chat_id=${TG_UID}&text=${i}号机IP被奈飞关小黑屋,已自动更换IP"
+    curl -s "https://api.telegram.org/bot5310162411:${TG_BOT_TOKEN}/sendMessage?chat_id=${TG_UID}&text=${i}号机IP被奈飞关小黑屋,已自动更换IP"
     timeout 8s echo -e "1\n${i}\n5\ny\n" | ./oci-help -c /root/oci-help.ini
   elif   [ "${CODES[i]}" = "200" ]; then
     #解析IP并通知
@@ -65,8 +64,8 @@ for ((i = NUM; COUNT < ${#DOMAINS[@]}; i++, COUNT++)); do
     #处理返回参数
     if [ "$RESPONSE" != "${RESPONSE%success*}" ] && [ "$(echo "$RESPONSE" | grep "\"success\":true")" != "" ]; then
       echo "Updated succesfuly!"
-      curl -s "https://api.telegram.org/bot2127424667:AAH1UiFuMBIhPXevSYI8QttJFWlfFT-Qpbg/sendMessage?chat_id=1191889094&text=奈飞中转域名已更改为${i}号机IP,为${IPS[i]}"
-      curl -s "https://api.telegram.org/bot5310162411:AAHB4Cjh-oHJ4JbBZSrDkOlrwaSWtvZgouo/sendMessage?chat_id=1952026695&text=奈飞中转域名已更改为${i}号机IP,为${IPS[i]}"
+      curl -s "https://api.telegram.org/bot2127424667:${TG_BOT_TOKEN}/sendMessage?chat_id=${TG_UID}&text=奈飞中转域名已更改为${i}号机IP,为${IPS[i]}"
+      curl -s "https://api.telegram.org/bot5310162411:${TG_BOT_TOKEN}/sendMessage?chat_id=${TG_UID}&text=奈飞中转域名已更改为${i}号机IP,为${IPS[i]}"
     else
       echo 'Something went wrong :('
       echo "Response: $RESPONSE"
