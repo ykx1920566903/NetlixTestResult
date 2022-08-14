@@ -1,6 +1,7 @@
 #!/bin/sh
 #更新DNS解析记录
-IP=138.2.76.198
+echo "请输入IP："
+read -r IP
 # API key, see https://www.cloudflare.com/a/account/my-account,
 # incorrect api-key results in E_UNAUTH error
 CFKEY=b1446c285b2d53c6b7c9fea5f09daff9eb37e
