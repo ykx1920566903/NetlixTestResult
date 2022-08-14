@@ -5,8 +5,9 @@ if [[ ${CODE} == "200" ]]; then
   echo '-------------分界线--------------------'
   echo '当前IP解锁正常,脚本退出'
   exit 0
+elif [[ ${CODE} == "000" ]]; then
+  exit 0
 else
-  echo '-------------分界线--------------------'
   echo '当前IP解锁失效,进行下一步骤'
 fi
 # API key, see https://www.cloudflare.com/a/account/my-account,
