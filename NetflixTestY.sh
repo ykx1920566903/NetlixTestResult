@@ -7,13 +7,13 @@ if [[ ${CODE} == "200" ]]; then
 fi
 # API key, see https://www.cloudflare.com/a/account/my-account,
 # incorrect api-key results in E_UNAUTH error
-CFKEY=b1446c285b2d53c6b7c9fea5f09daff9eb37e
+CFKEY=
 # Username, eg: user@example.com
-CFUSER=ykx990505@gmail.com
+CFUSER=
 # Zone name, eg: example.com
-CFZONE_NAME=yymood.top
+CFZONE_NAME=
 # Hostname to update, eg: homeserver.example.com
-CFRECORD_NAME=jcnetflix.yymood.top
+CFRECORD_NAME=
 # Record type, A(IPv4)|AAAA(IPv6), default IPv4
 CFRECORD_TYPE=A
 # Cloudflare TTL for record, between 120 and 86400 seconds
